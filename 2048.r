@@ -274,6 +274,7 @@ is_there_possible_join <- function(current_matrix,side){
 }
 
 nextmove_result <- function (current_matrix,side) {
+  print(side)
 	if (length(side[side==0]) == 0 || length(side[side!=0]) == 0) {
 		stop("Logical Error! Side vector should have a zero and a non-zero member");
 	}
@@ -285,7 +286,7 @@ nextmove_result <- function (current_matrix,side) {
 		print ("you press left")
 		current_matrix = clean_row_col(current_matrix,c(1:4),"left")
 		current_matrix = same_joiner(current_matrix,"left")	
-		current_matrix = clean_ro[w_col(current_matrix,c(1:4),"left")
+		current_matrix = clean_ro[w_col(current_matrix,c(1:4),"left")]
 		if (temp!=current_matrix){current_matrix = set_new_tile_value(current_matrix)}
 
 	}else if (all(side == c(1,0))){
@@ -314,19 +315,21 @@ nextmove_result <- function (current_matrix,side) {
 }
 
 play <- function(dimention = 4){
+  library("keypress")
 	current_matrix = init_2014(dimention)
 	#current_matrix = matrix(c(rep(0,12),2,0,2,2),nrow=4,byrow=FALSE)
 	not_ended_yet = TRUE
 	while(not_ended_yet){
 		#clear()
 		show_hint(current_matrix);
-		sidecode = list ("4" = c(-1,0), "6" = c(1,0),"8"=c(0,1),"2"=c(0,-1))
+		sidecode = list ("left" = c(-1,0), "right" = c(1,0),"up"=c(0,1),"down"=c(0,-1))
 		side = NULL
 		while (is.null(side)){
 			cat("Please enter correct value!")
-			side = sidecode[readline()][[1]]
+			#side = sidecode[readline()][[1]]
+		  side = keypress()
 		}
-		current_matrix = nextmove_result(current_matrix,side)
+		current_matrix = nextmove_result(current_matrix,sidecode[side][[1]])
 		not_ended_yet= !(is_full(current_matrix) && !can_save(current_matrix))
 	}
 }
